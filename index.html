@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Learning Hub</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0f172a;
+  color:white;
+  text-align:center;
+}
+
+header{
+  padding:20px;
+  background:#111827;
+}
+
+nav button{
+  margin:5px;
+  padding:10px 15px;
+  border:none;
+  border-radius:8px;
+  background:#1f2937;
+  color:white;
+  cursor:pointer;
+}
+
+nav button:hover{
+  background:#374151;
+}
+
+.page{ display:none; padding:20px; }
+
+.calcGrid{
+  display:grid;
+  grid-template-columns:repeat(4,70px);
+  gap:10px;
+  justify-content:center;
+}
+
+.calcGrid button{
+  height:60px;
+  border:none;
+  border-radius:10px;
+  background:#1f2937;
+  color:white;
+}
+
+.zero{
+  grid-column:span 2;
+}
+
+.card{
+  background:#1f2937;
+  margin:20px auto;
+  padding:15px;
+  border-radius:10px;
+  width:200px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>📘 Student Learning Hub</h1>
+  <p>Interactive tools and activities for students</p>
+</header>
+
+<nav>
+  <button onclick="showPage('home')">Home</button>
+  <button onclick="showPage('math')">Math</button>
+  <button onclick="showPage('typing')">Typing</button>
+  <button onclick="showPage('tools')">Tools</button>
+  <button onclick="showPage('extras')">More Activities</button>
+</nav>
+
+<main>
+
+<!-- HOME -->
+<div id="home" class="page">
+  <h2>Welcome</h2>
+  <p>Select a category to start learning.</p>
+</div>
+
+<!-- MATH -->
+<div id="math" class="page">
+  <h2>🧠 Math Practice</h2>
+  <p id="question"></p>
+  <input id="answer" placeholder="Answer">
+  <button onclick="checkAnswer()">Submit</button>
+  <p id="result"></p>
+</div>
+
+<!-- TYPING -->
+<div id="typing" class="page">
+  <h2>⌨️ Typing Test</h2>
+  <p id="text">The quick brown fox jumps over the lazy dog.</p>
+  <input id="typingInput" placeholder="Start typing...">
+  <p id="typingResult"></p>
+</div>
+
+<!-- TOOLS -->
+<div id="tools" class="page">
+  <h2>🧮 Calculator</h2>
+  <input id="calcDisplay" value="0" readonly>
+  <div class="calcGrid">
+    <button onclick="calcClear()">C</button>
+    <button onclick="calcInput('/')">÷</button>
+    <button onclick="calcInput('*')">×</button>
+    <button onclick="calcInput('-')">−</button>
+
+    <button onclick="calcInput('7')">7</button>
+    <button onclick="calcInput('8')">8</button>
+    <button onclick="calcInput('9')">9</button>
+    <button onclick="calcInput('+')">+</button>
+
+    <button onclick="calcInput('4')">4</button>
+    <button onclick="calcInput('5')">5</button>
+    <button onclick="calcInput('6')">6</button>
+    <button onclick="calcEnter()">=</button>
+
+    <button onclick="calcInput('1')">1</button>
+    <button onclick="calcInput('2')">2</button>
+    <button onclick="calcInput('3')">3</button>
+
+    <button class="zero" onclick="calcInput('0')">0</button>
+  </div>
+</div>
+
+<!-- EXTRAS -->
+<div id="extras" class="page">
+  <h2>📚 More Activities</h2>
+
+  <div class="card">
+    <h3>Memory Game</h3>
+    <button onclick="startMemory()">Start</button>
+  </div>
+
+  <div class="card">
+    <h3>Extra Learning Game</h3>
+    <button onclick="openExtraGame()">Launch</button>
+  </div>
+
+  <div id="memory"></div>
+</div>
+
+</main>
+
+<footer>
+  <p>© 2026 Student Learning Hub</p>
+</footer>
+
+<script>
+/* PAGE SWITCH */
+function showPage(p){
+  document.querySelectorAll(".page").forEach(x=>x.style.display="none");
+  document.getElementById(p).style.display="block";
+}
+showPage("home");
+
+/* MATH GAME */
+let a,b;
+function newQ(){
+  a=Math.floor(Math.random()*10);
+  b=Math.floor(Math.random()*10);
+  document.getElementById("question").textContent=a+" + "+b;
+}
+function checkAnswer(){
+  let val=document.getElementById("answer").value;
+  document.getElementById("result").textContent=
+    Number(val)===a+b?"Correct!":"Try again";
+  newQ();
+}
+newQ();
+
+/* TYPING */
+document.getElementById("typingInput").addEventListener("input", e=>{
+  if(e.target.value==="The quick brown fox jumps over the lazy dog."){
+    document.getElementById("typingResult").textContent="Done!";
+  }
+});
+
+/* CALCULATOR */
+let calc="0";
+function calcInput(v){
+  calc=calc==="0"?v:calc+v;
+  document.getElementById("calcDisplay").value=calc;
+}
+function calcClear(){
+  calc="0";
+  document.getElementById("calcDisplay").value=calc;
+}
+function calcEnter(){
+  try{
+    calc=Function("return ("+calc+")")().toString();
+  }catch{
+    calc="0";
+  }
+  document.getElementById("calcDisplay").value=calc;
+}
+
+/* MEMORY GAME */
+function startMemory(){
+  const m=document.getElementById("memory");
+  m.innerHTML="";
+  let nums=[1,2,1,2].sort(()=>Math.random()-0.5);
+
+  nums.forEach(n=>{
+    let b=document.createElement("button");
+    b.textContent="?";
+    b.style.margin="5px";
+    b.onclick=()=>b.textContent=n;
+    m.appendChild(b);
+  });
+}
+
+/* EXTRA LEARNING GAME BUTTON */
+function openExtraGame(){
+  window.open("https://supercatlive030-cloud.github.io/google-classroom/", "_blank");
+}
+</script>
+
+</body>
+</html>
